@@ -1,0 +1,37 @@
+---
+- name: "Play 1 – webserver install and configure"
+  hosts: apache 
+  become: yes
+  tasks:
+  roles:
+    - apache
+
+- name: "Play 2 – tomcat install and configure"
+  hosts: tomcat
+  become: yes
+  tasks:
+    - name: "Install Tomcat"
+      yum: 
+          name: "{{ item }}"
+          state: present
+      with_items:
+        - tomcat7
+        - tomcat7-webapps 
+
+    - name: "service start"
+      service:
+         name: tomcat7
+         state: restarted
+
+- name: "Play 3 – proxypass"
+  hosts: apache
+  become: yes
+  tasks:
+    - name: "proxypass file copy"
+      copy:
+        src: /etc/ansible/flipkart/proxypass.conf
+        dest: /etc/httpd/conf.d/
+        owner: root
+        group: root
+        mode: '0644'
+

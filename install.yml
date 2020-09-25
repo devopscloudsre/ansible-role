@@ -1,0 +1,17 @@
+---
+- name: "Play1 - Install all MiddleTier Package"
+  hosts: apache
+  become: yes    ## Sudo to root from ansi user
+#  vars:
+ #   ansible_python_interpreter: /usr/bin/python    # if you are using mixed python version  in your system, then some error might come 
+  tasks:
+    - name: "Install packages"
+      yum:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - httpd
+        - tomcat7
+        - tomcat7-webapps
+        - tomcat7-admin-webapps
+

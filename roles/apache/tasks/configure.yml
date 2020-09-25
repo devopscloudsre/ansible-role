@@ -1,0 +1,27 @@
+- name: Create a Docroot directory
+  file:
+    path: /srv/docroot
+    state: directory
+    owner: apache
+    group: apache
+    recurse: yes
+    mode: '0644'
+
+- name: "Copy index.html file"
+  copy:
+    src: files/lb-health-check.html
+    dest: /srv/docroot/lb-health-check.html
+    owner: root
+    group: root
+    mode: 0644 
+ 
+- name: "Copy httpd Configuration file"
+  copy:
+    src: files/httpd-ansible.conf
+    dest: /etc/httpd/conf/httpd.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+  - restart_apache
+
